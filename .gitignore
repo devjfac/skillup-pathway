@@ -1,0 +1,28 @@
+# Java / Maven
+backend/target/
+*.class
+*.log
+
+# Node / React
+frontend/node_modules/
+frontend/dist/
+
+# Android / Gradle
+mobile/.gradle/
+mobile/build/
+mobile/app/build/
+mobile/local.properties
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Variables de entorno y credenciales
+.env
+*.env
+application-local.yml
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
