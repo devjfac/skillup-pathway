@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillUp Pathway — Portal Web de Usuarios y Rutas (Servlets y JSP)</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a href="#contenido-principal" class="skip-link">Saltar al contenido principal</a>
+
+  <header class="site-header" role="banner">
+    <a href="index.html" class="brand-identity">
+      <span>SkillUp Pathway — Módulo Web (Servlets + JSP)</span>
+    </a>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul>
+        <li><a href="index.html" class="nav-link" aria-current="page">Inicio (Formularios HTML)</a></li>
+        <li><a href="acceso" class="nav-link">Iniciar Sesión (RF-02)</a></li>
+        <li><a href="usuarios" class="nav-link">Gestión de Usuarios (RF-09)</a></li>
+        <li><a href="usuarios?accion=nuevo" class="nav-link">Registro de Aprendiz (RF-01)</a></li>
+        <li><a href="rutas" class="nav-link">Catálogo de Rutas (RF-04 / RF-05)</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="app-shell">
+    <aside class="app-sidebar" aria-label="Información del módulo codificado">
+      <h2 style="margin-top:0; font-size:1.05rem;">Módulo Codificado</h2>
+      <p style="margin:0.3rem 0;"><strong>Proyecto:</strong> SkillUp Pathway</p>
+      <p style="margin:0.3rem 0;"><strong>Evidencia:</strong> GA7-220501096-AA2-EV02</p>
+      <p style="margin:0.3rem 0;"><strong>Tecnologías:</strong> Java 21, Jakarta Servlets 6.0, JSP 3.1, JSTL 3.0, JDBC MySQL 8.4</p>
+      <p style="margin:0.3rem 0;"><strong>Requisitos cubiertos:</strong> RF-01, RF-02, RF-03, RF-04, RF-05, RF-09</p>
+    </aside>
+
+    <main id="contenido-principal" class="main-workspace">
+      <!-- FORMULARIO HTML 1: CONSULTA POR MÉTODO HTTP GET HACIA UsuarioServlet -->
+      <section class="card-panel" aria-labelledby="titulo-busqueda-get">
+        <h1 id="titulo-busqueda-get" style="margin-top:0; font-size:1.25rem;">
+          1. Consulta Rápida de Usuarios en el Directorio (Formulario HTML con Método GET)
+        </h1>
+        <p>
+          Este formulario HTML envía parámetros de consulta en la cadena de URL hacia el controlador
+          <code>UsuarioServlet</code> (<code>GET /usuarios</code>), invocando el método <code>doGet</code>.
+        </p>
+        <form id="form-consulta-get" action="usuarios" method="get">
+          <input type="hidden" name="accion" value="listar">
+          <div class="form-grid">
+            <div class="field">
+              <label for="busqueda-q">Nombre, Correo o Número de Documento</label>
+              <span class="hint">Ejemplo: Araujo, 3855467 o jfac2420@gmail.com</span>
+              <input type="text" id="busqueda-q" name="q" placeholder="Término de búsqueda...">
+            </div>
+            <div class="field">
+              <label for="filtro-rol">Filtrar por Rol de Plataforma</label>
+              <span class="hint">Roles del modelo de datos GA4-AA1-EV01</span>
+              <select id="filtro-rol" name="rol">
+                <option value="">Todos los roles</option>
+                <option value="ESTUDIANTE">Estudiante</option>
+                <option value="INSTRUCTOR">Instructor</option>
+                <option value="MENTOR">Mentor</option>
+                <option value="EMPRESA">Empresa</option>
+                <option value="ADMINISTRADOR">Administrador</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="filtro-estado">Estado de Cuenta</label>
+              <span class="hint">Filtra cuentas activas o inactivas</span>
+              <select id="filtro-estado" name="estado">
+                <option value="">Todos</option>
+                <option value="ACTIVO">Activos</option>
+                <option value="INACTIVO">Inactivos</option>
+              </select>
+            </div>
+          </div>
+          <div class="btn-group">
+            <button type="submit" class="btn btn-primary">Consultar Directorio (HTTP GET)</button>
+            <a href="usuarios" class="btn btn-secondary">Ver Listado Completo en JSP</a>
+          </div>
+        </form>
+      </section>
+
+      <!-- FORMULARIO HTML 2: REGISTRO DIRECTO POR MÉTODO HTTP POST HACIA UsuarioServlet -->
+      <section class="card-panel" aria-labelledby="titulo-registro-post">
+        <h2 id="titulo-registro-post" style="margin-top:0; font-size:1.2rem;">
+          2. Registro de Cuenta de Aprendiz (Formulario HTML con Método POST — RF-01 / HU-01)
+        </h2>
+        <p>
+          Este formulario HTML envía los datos sensibles en el cuerpo de la petición HTTP mediante
+          <code>method="post"</code> hacia <code>UsuarioServlet</code> (<code>POST /usuarios</code>),
+          procesado por el método <code>doPost</code>.
+        </p>
+        <form id="form-registro-post" action="usuarios" method="post">
+          <input type="hidden" name="accion" value="registrar">
+          <div class="form-grid">
+            <div class="field">
+              <label for="reg-tipo-doc">Tipo de Documento *</label>
+              <span class="hint">Seleccione el tipo de identificación oficial</span>
+              <select id="reg-tipo-doc" name="tipoDocumento" required>
+                <option value="CE">Cédula de Extranjería (C.E.)</option>
+                <option value="CC">Cédula de Ciudadanía (C.C.)</option>
+                <option value="TI">Tarjeta de Identidad (T.I.)</option>
+                <option value="PASAPORTE">Pasaporte</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="reg-num-doc">Número de Identificación *</label>
+              <span class="hint">De 6 a 12 caracteres alfanuméricos sin puntos</span>
+              <input type="text" id="reg-num-doc" name="numeroDocumento" required pattern="^[0-9A-Za-z]{5,20}$">
+            </div>
+            <div class="field">
+              <label for="reg-nombres">Nombres Completos *</label>
+              <span class="hint">Nombres del aprendiz o colaborador</span>
+              <input type="text" id="reg-nombres" name="nombres" required>
+            </div>
+            <div class="field">
+              <label for="reg-apellidos">Apellidos Completos *</label>
+              <span class="hint">Apellidos del aprendiz o colaborador</span>
+              <input type="text" id="reg-apellidos" name="apellidos" required>
+            </div>
+            <div class="field">
+              <label for="reg-correo">Correo Electrónico Institucional *</label>
+              <span class="hint">Ejemplo: aprendiz@sena.edu.co (CA-01 HU-01)</span>
+              <input type="email" id="reg-correo" name="correoElectronico" required>
+            </div>
+            <div class="field">
+              <label for="reg-clave">Contraseña Segura *</label>
+              <span class="hint">Mínimo 8 caracteres, mayúscula, minúscula, número y símbolo (CA-02 HU-01)</span>
+              <input type="password" id="reg-clave" name="contrasena" required minlength="8">
+            </div>
+            <div class="field">
+              <label for="reg-rol">Rol Inicial Asignado *</label>
+              <span class="hint">Rol en la tabla asociativa usuario_rol</span>
+              <select id="reg-rol" name="rol" required>
+                <option value="ESTUDIANTE">Estudiante</option>
+                <option value="INSTRUCTOR">Instructor</option>
+                <option value="MENTOR">Mentor</option>
+                <option value="EMPRESA">Empresa</option>
+                <option value="ADMINISTRADOR">Administrador</option>
+              </select>
+            </div>
+          </div>
+          <div class="btn-group">
+            <button type="submit" class="btn btn-primary">Registrar Cuenta (HTTP POST)</button>
+            <button type="reset" class="btn btn-secondary">Limpiar Campos</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- FORMULARIO HTML 3: AUTENTICACIÓN POR MÉTODO POST HACIA AutenticacionServlet -->
+      <section class="card-panel" aria-labelledby="titulo-login-post">
+        <h2 id="titulo-login-post" style="margin-top:0; font-size:1.2rem;">
+          3. Inicio de Sesión en Plataforma (Formulario HTML con Método POST — RF-02 / HU-02)
+        </h2>
+        <form id="form-login-post" action="acceso" method="post">
+          <div class="form-grid">
+            <div class="field">
+              <label for="login-correo">Correo Electrónico *</label>
+              <input type="email" id="login-correo" name="correoElectronico" required>
+            </div>
+            <div class="field">
+              <label for="login-clave">Contraseña *</label>
+              <input type="password" id="login-clave" name="contrasena" required>
+            </div>
+          </div>
+          <div class="btn-group">
+            <button type="submit" class="btn btn-primary">Validar Credenciales (HTTP POST)</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <footer class="site-footer" role="contentinfo">
+    <p style="margin:0;">
+      <strong>SkillUp Pathway</strong> — Proyecto Formativo ADSO (Ficha 3336215) | Evidencia GA7-220501096-AA2-EV02.
+    </p>
+  </footer>
+</body>
+</html>
