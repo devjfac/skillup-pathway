@@ -1,7 +1,9 @@
 # Java / Maven
 backend/target/
+backend/dependency-reduced-pom.xml
 *.class
 *.log
+*.log.lck
 
 # Node / React
 frontend/node_modules/
