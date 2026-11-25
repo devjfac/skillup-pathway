@@ -1,0 +1,22 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<a href="#contenido-principal" class="skip-link">Saltar al contenido principal</a>
+<header class="site-header" role="banner">
+  <a href="${pageContext.request.contextPath}/index.html" class="brand-identity" aria-label="SkillUp Pathway Inicio">
+    <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+      <rect width="32" height="32" rx="6" fill="#00324D" stroke="#FFFFFF" stroke-width="2"/>
+      <path d="M8 22L14 10L20 18L24 12" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>SkillUp Pathway</span>
+  </a>
+
+  <nav class="main-nav" aria-label="Navegación principal del módulo web">
+    <ul>
+      <li><a href="${pageContext.request.contextPath}/index.html" class="nav-link">Inicio y Formularios HTML</a></li>
+      <li><a href="${pageContext.request.contextPath}/acceso" class="nav-link">Acceso y Registro (RF-01 / RF-02)</a></li>
+      <li><a href="${pageContext.request.contextPath}/usuarios" class="nav-link">Directorio y Gestión CRUD (RF-03 / RF-09)</a></li>
+      <li><a href="${pageContext.request.contextPath}/usuarios?accion=nuevo" class="nav-link">Nuevo Usuario (GET / POST)</a></li>
+      <li><a href="${pageContext.request.contextPath}/rutas" class="nav-link">Catálogo de Rutas (RF-04 / RF-05)</a></li>
+    </ul>
+  </nav>
+</header>
