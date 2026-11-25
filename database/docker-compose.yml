@@ -1,0 +1,32 @@
+# Servidor MySQL 8.4 para desarrollo local del proyecto SkillUp Pathway.
+# Uso:
+#   export SKILLUP_DB_CONTRASENA='una-contrasena-local'
+#   docker compose -f database/docker-compose.yml up -d
+# Los scripts de database/scripts se ejecutan automáticamente la primera vez
+# que se crea el volumen de datos.
+name: skillup
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: skillup-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: skillup
+      MYSQL_USER: skillup_app
+      MYSQL_PASSWORD: ${SKILLUP_DB_CONTRASENA:?Defina la variable de entorno SKILLUP_DB_CONTRASENA}
+      TZ: America/Bogota
+    ports:
+      - "${SKILLUP_DB_PUERTO:-3306}:3306"
+    volumes:
+      - ./scripts:/docker-entrypoint-initdb.d:ro
+      - skillup_datos:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u skillup_app -p\"$$MYSQL_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+volumes:
+  skillup_datos:
